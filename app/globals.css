@@ -2,25 +2,166 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #101427;
+  --muted: #4d5775;
+  --royal: #4169e1;
+  --glass-border: rgba(255, 255, 255, 0.68);
+  --glass-surface: rgba(255, 255, 255, 0.56);
+  --glass-surface-strong: rgba(255, 255, 255, 0.72);
+  --glass-shadow:
+    0 22px 60px rgba(32, 60, 154, 0.14),
+    0 6px 18px rgba(32, 60, 154, 0.09);
+  --glass-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+  --glass-backdrop-blur: 16px;
+  --glass-saturate: 165%;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-royal: var(--royal);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #070b18;
+  --foreground: #edf2ff;
+  --muted: #a7b1cf;
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --glass-surface: rgba(10, 16, 34, 0.56);
+  --glass-surface-strong: rgba(14, 21, 43, 0.72);
+  --glass-shadow:
+    0 26px 70px rgba(0, 0, 0, 0.5),
+    0 10px 24px rgba(0, 0, 0, 0.28);
+  --glass-inner-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-backdrop-blur: 18px;
+  --glass-saturate: 155%;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  scroll-margin-top: 104px;
+}
+
+.glass-card {
+  position: relative;
+  border: 1px solid var(--glass-border);
+  background:
+    linear-gradient(
+      145deg,
+      var(--glass-surface-strong) 0%,
+      var(--glass-surface) 48%,
+      color-mix(in oklab, var(--glass-surface) 78%, transparent) 100%
+    );
+  box-shadow: var(--glass-shadow), var(--glass-inner-highlight);
+  backdrop-filter: blur(var(--glass-backdrop-blur)) saturate(var(--glass-saturate));
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.44), transparent 52%),
+    radial-gradient(circle at 88% 100%, rgba(65, 105, 225, 0.18), transparent 56%);
+  opacity: 0.92;
+}
+
+.dark .glass-card {
+  color: color-mix(in oklab, var(--foreground) 97%, #fff 3%);
+}
+
+.dark .glass-card::before {
+  background:
+    radial-gradient(circle at 14% 0%, rgba(255, 255, 255, 0.12), transparent 50%),
+    radial-gradient(circle at 88% 100%, rgba(65, 105, 225, 0.26), transparent 56%);
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+a,
+button,
+input,
+textarea {
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+:focus-visible {
+  outline: 2px solid rgba(65, 105, 225, 0.85);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 0.75rem;
+  top: 0.75rem;
+  z-index: 110;
+  transform: translateY(-160%);
+  border-radius: 999px;
+  border: 1px solid rgba(65, 105, 225, 0.5);
+  background: rgba(65, 105, 225, 0.95);
+  color: #fff;
+  padding: 0.55rem 0.95rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: transform 220ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.project-thumb-frame {
+  border: 2px solid color-mix(in oklab, white 55%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 6px 16px rgba(65, 105, 225, 0.12);
+}
+
+.dark .project-thumb-frame {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.hero-glow {
+  background:
+    radial-gradient(circle at 8% 18%, rgba(65, 105, 225, 0.24), transparent 35%),
+    radial-gradient(circle at 88% 20%, rgba(65, 105, 225, 0.18), transparent 32%),
+    radial-gradient(circle at 50% 88%, rgba(65, 105, 225, 0.13), transparent 32%);
+}
+
+.dark .hero-glow {
+  background:
+    radial-gradient(circle at 8% 18%, rgba(65, 105, 225, 0.33), transparent 35%),
+    radial-gradient(circle at 88% 20%, rgba(65, 105, 225, 0.24), transparent 32%),
+    radial-gradient(circle at 50% 88%, rgba(65, 105, 225, 0.18), transparent 32%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
